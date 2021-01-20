@@ -23,6 +23,9 @@
 	color: black;
 	padding:6px;
 }
+.geMenubarContainer {
+	background-color: #124191 !important;
+}
 .geMenubarContainer .geItem, .geToolbar .geButton, .geToolbar .geLabel {
 	cursor:pointer !important;
 }
@@ -49,6 +52,7 @@
 }
 .geSidebarFooter {
 	border-top:1px solid #dadce0;
+	color:#124191 !important;
 }
 .geFormatSection {
 	border-bottom:1px solid #dadce0;
@@ -88,18 +92,18 @@
 	margin-top:-5px;
 	font-size:12px;
 	padding:4px 6px 4px 6px;
-	background-color:#f2dede;
+	background-color:white !important;
 	border:1px solid #ebccd1;
-	color:#a94442 !important;
+	color:white !important;
 	border-radius:3px;
 }
 .geStatusAlertOrange {
 	white-space:nowrap;
-	margin-top:-5px;
+	margin-top:-5px; 
 	font-size:12px;
 	padding:4px 6px 4px 6px;
-	background-color:rgb(242, 147, 30);
-	border:rgb(240, 135, 5);
+	background-color:white;
+	border:rgb(255, 255, 255);
 	color:#000000 !important;
 	border-radius:3px;
 	opacity:0.8;
@@ -218,7 +222,7 @@
 	opacity: .5;
 }
 .gePrimaryBtn, .mxWindow .gePrimaryBtn {
-	background-color: #4d90fe;
+	background-color: white !important;
 	background-image: linear-gradient(#4d90fe 0px,#4787ed 100%);
 	border: 1px solid #3079ed;
 	color: #fff;
@@ -424,6 +428,7 @@ div.mxWindow .geButton {
 .geItem {
 	vertical-align: top;
 	display: inline-block;
+	color:white !important;
 }
 .geSidebarTooltip {
 	position:absolute;
@@ -748,6 +753,7 @@ html td.mxPopupMenuItem {
 	padding:7px 30px 7px 30px;
 	font-family:Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
 	font-size:10pt;
+	opacity:0.9;
 }
 html td.mxPopupMenuIcon {
 	background-color:white;

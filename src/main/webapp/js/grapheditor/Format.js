@@ -546,6 +546,7 @@ Format.prototype.refresh = function()
 	}
 	else
 	{
+		
 		label.style.backgroundColor = this.inactiveTabBackgroundColor;
 		label.style.borderLeftWidth = '1px';
 		label.style.cursor = 'pointer';
@@ -556,6 +557,15 @@ Format.prototype.refresh = function()
 		// Workaround for ignored background in IE
 		label2.style.backgroundColor = this.inactiveTabBackgroundColor;
 		label3.style.backgroundColor = this.inactiveTabBackgroundColor;
+
+		// Text
+		mxUtils.write(label2, mxResources.get('text'));
+		div.appendChild(label2);
+
+		var textPanel = div.cloneNode(false);
+		textPanel.style.display = 'none';
+		this.panels.push(new TextFormatPanel(this, ui, textPanel));
+		this.container.appendChild(textPanel);
 		
 		// Style
 		if (containsLabel)
@@ -576,14 +586,7 @@ Format.prototype.refresh = function()
 			addClickHandler(label, stylePanel, idx++);
 		}
 		
-		// Text
-		mxUtils.write(label2, mxResources.get('text'));
-		div.appendChild(label2);
-
-		var textPanel = div.cloneNode(false);
-		textPanel.style.display = 'none';
-		this.panels.push(new TextFormatPanel(this, ui, textPanel));
-		this.container.appendChild(textPanel);
+		
 		
 		// Arrange
 		mxUtils.write(label3, mxResources.get('arrange'));
@@ -2754,8 +2757,134 @@ mxUtils.extend(TextFormatPanel, BaseFormatPanel);
 TextFormatPanel.prototype.init = function()
 {
 	this.container.style.borderBottom = 'none';
+	this.manageProperties(this.container);
 	this.addFont(this.container);
 };
+
+TextFormatPanel.prototype.manageProperties = function(container)
+{
+	var ui = this.editorUi;
+	var editor = ui.editor;
+	var graph = editor.graph;
+	var ss = this.format.getSelectionState();
+	
+	var title = this.createTitle('Manage Properties');
+	title.style.paddingLeft = '18px';
+	title.style.paddingTop = '10px';
+	title.style.paddingBottom = '6px';
+	container.appendChild(title);
+
+	var stylePanel = this.createPanel();
+	stylePanel.style.paddingTop = '2px';
+	stylePanel.style.paddingBottom = '2px';
+	stylePanel.style.position = 'relative';
+	stylePanel.style.marginLeft = '-2px';
+	stylePanel.style.borderWidth = '0px';
+	stylePanel.className = 'geToolbarContainer';
+	container.appendChild(stylePanel);
+
+	/*mxUtils.write(stylePanel, 'IP Address');
+
+	var input = document.createElement('input');
+	input.style.textAlign = 'right';
+	input.style.marginTop = '2px';
+	input.style.width = '41px';
+	input.setAttribute('title', 'IP address');
+	
+	stylePanel.appendChild(input);*/
+
+	var addTextArea = function(index, name, value)
+	{
+		names[index] = name;
+		texts[index] = form.addTextarea(names[count] + ':', value, 2);
+		texts[index].style.width = '100%';
+		
+		if (value.indexOf('\n') > 0)
+		{
+			texts[index].setAttribute('rows', '2');
+		}
+		
+		//addRemoveButton(texts[index], name);
+		
+		/* if (meta[name] != null && meta[name].editable == false)
+		{
+			texts[index].setAttribute('disabled', 'disabled');
+		} */
+	};
+
+	var getDisplayIdForCell = function(ui, cell)
+	{
+		var id = null;
+		
+		if (ui.editor.graph.getModel().getParent(cell) != null)
+		{
+			id = cell.getId();
+		}
+		
+		return id;
+	};
+
+	var form = new mxForm('properties');
+	form.table.style.width = '100%';
+
+	if(ss.vertices && ss.vertices.length > 0){
+		var cell = ss.vertices[0];
+		var id = getDisplayIdForCell(ui, cell);
+		var attrs = cell.value.attributes;
+		var temp = [];
+		var names = [];
+		var texts = [];
+		var count = 0;
+
+		if(attrs){
+			for (var i = 0; i < attrs.length; i++)
+			{
+				//if ((isLayer || attrs[i].nodeName != 'label') && attrs[i].nodeName != 'placeholders')
+				//{
+					temp.push({name: attrs[i].nodeName, value: attrs[i].nodeValue});
+				//}
+			}
+			
+			// Sorts by name
+			temp.sort(function(a, b)
+			{
+				if (a.name < b.name)
+				{
+					return -1;
+				}
+				else if (a.name > b.name)
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			});
+
+			if (id != null)
+			{	
+				var text = document.createElement('div');
+				text.style.width = '100%';
+				text.style.fontSize = '11px';
+				text.style.textAlign = 'center';
+				mxUtils.write(text, id);
+				
+				form.addField(mxResources.get('id') + ':', text);
+			}
+			
+			for (var i = 0; i < temp.length; i++)
+			{
+				addTextArea(count, temp[i].name, temp[i].value);
+				count++;
+			}
+			stylePanel.appendChild(form.table);
+		}		
+
+	}
+
+	return container;
+}
 
 /**
  * Adds the label menu items to the given menu and parent.
@@ -6182,6 +6311,7 @@ DiagramFormatPanel.prototype.init = function()
 
 	if (graph.isEnabled())
 	{
+		//this.container.appendChild(this.manageProperties(this.createPanel()));
 		this.container.appendChild(this.addOptions(this.createPanel()));
 		this.container.appendChild(this.addPaperSize(this.createPanel()));
 		this.container.appendChild(this.addStyleOps(this.createPanel()));

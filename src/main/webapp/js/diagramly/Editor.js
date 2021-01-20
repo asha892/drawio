@@ -3825,6 +3825,18 @@
 			return div;
 		};
 
+		var diagramFormatPanelManageProperties = DiagramFormatPanel.prototype.manageProperties;
+		DiagramFormatPanel.prototype.manageProperties = function(div)
+		{
+			div = diagramFormatPanelManageProperties.apply(this, arguments);
+
+			var ui = this.editorUi;
+			var editor = ui.editor;
+			var graph = editor.graph;
+
+			return div;
+		}
+
 		/**
 		 * Adds autosave and math typesetting options.
 		 */
